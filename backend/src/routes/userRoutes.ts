@@ -11,12 +11,14 @@ const prismaClient = new PrismaClient();
 const userRouter = Router();
 
 userRouter.post('/signup', async (req, res) => {
+    console.log("reached in signup");
     const body = req.body;
     const parsedData = signupInput.safeParse(body);
 
     // if (!parsedData.success) {
     //     return res.status(411).json({ message: "Incorrect inputs" });
     // }
+    console.log(parsedData)
     if (!parsedData.success) {
         return res.status(400).json({
             message: "Validation failed",
@@ -27,7 +29,7 @@ userRouter.post('/signup', async (req, res) => {
     const existingUser = await prismaClient.user.findUnique({
         where: { email: parsedData.data.username }
     });
-
+    console.log(existingUser)
     if (existingUser) {
         return res.status(403).json({ message: "User already exists" });
     }
@@ -42,7 +44,7 @@ userRouter.post('/signup', async (req, res) => {
         }
     });
     const userId = user.id;
-
+    console.log("created user")
     const token = jwt.sign({ userId }, process.env.JWT_PASSWORD as string, {
         expiresIn: '7d', // Optional but recommended
     });
