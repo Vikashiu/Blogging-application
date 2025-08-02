@@ -1,31 +1,31 @@
-import { useEffect, useState, type AnyActionArg } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import MediumNavbar from "@/component/dashboardComponents/MediumNavbar";
 // import TagFilterBar from "@/component/dashboardComponents/TagLineFilter"; // Assuming TagLineFilter is your TagFilterBar component
 import BlogCard from "@/component/dashboardComponents/BlogCard";
 
-import type { Tagtype, Blogtype } from "../types/types";
+import type { Blogtype } from "../types/types";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Dashboard() {
   const [blogs, setBlogs] = useState<Blogtype[]>([]);
-  const [tags, setTags] = useState<Tagtype[]>([]);
-  const [activeTagId, setActiveTagId] = useState<string | null>(null);
-  const [loadingTags, setLoadingTags] = useState(true); // New loading state for tags
+  // const [tags, setTags] = useState<Tagtype[]>([]);
+  // const [activeTagId, setActiveTagId] = useState<string | null>(null);
+  // const [loadingTags, setLoadingTags] = useState(true); // New loading state for tags
   const [loadingBlogs, setLoadingBlogs] = useState(true); // New loading state for blogs
 
   useEffect(() => {
     // Fetch Tags
-    setLoadingTags(true); // Set loading for tags to true
-    axios
-      .get<AnyActionArg>(`${BACKEND_URL}/api/v1/tags`)
-      .then((res) => {
-        console.log("Tags:", res.data);
-        setTags(res.data);
-      })
-      .catch((err) => console.error("Failed to fetch tags", err))
-      .then(() => setLoadingTags(false)); // Set loading for tags to false
+    // setLoadingTags(true); // Set loading for tags to true
+    // axios
+    //   .get<AnyActionArg>(`${BACKEND_URL}/api/v1/tags`)
+    //   .then((res) => {
+    //     console.log("Tags:", res.data);
+    //     setTags(res.data);
+    //   })
+    //   .catch((err) => console.error("Failed to fetch tags", err))
+    //   .then(() => setLoadingTags(false)); // Set loading for tags to false
 
     fetchBlogs();
   }, []);
@@ -43,10 +43,10 @@ export default function Dashboard() {
     }
   };
 
-  const handleTagSelect = (tagId: string | null) => {
-    setActiveTagId(tagId);
-    // fetchBlogs(tagId); // Call fetchBlogs when a tag is selected
-  };
+  // const handleTagSelect = (tagId: string | null) => {
+  //   setActiveTagId(tagId);
+  //   // fetchBlogs(tagId); // Call fetchBlogs when a tag is selected
+  // };
 
   return (
     <div>

@@ -10,7 +10,7 @@ interface PublishPageProps {
   onSubmit: (meta: { subtitle: string; coverimage: string | null ; tags: string[]}) => void;
 }
 
-const PublishPage = ({title, content,onClose, onSubmit}:PublishPageProps) => {
+const PublishPage = ({title, onClose, onSubmit}:PublishPageProps) => {
   const [topicInput, setTopicInput] = useState<string>('');
   const [storySubtitle, setStorySubtitle] = useState<string>('');
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);

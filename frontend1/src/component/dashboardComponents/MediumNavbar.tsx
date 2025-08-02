@@ -1,5 +1,5 @@
 
-import { Search, Bell, Pencil } from 'lucide-react';
+import { Bell, Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { SearchBlogs } from '../CreateComponent/SearchBlogs'; // Adjust the import path as necessary
 
