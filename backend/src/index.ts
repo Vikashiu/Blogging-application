@@ -29,11 +29,6 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/tags', tagRouter);
 app.use('/api/v1/gemini', giminiRouter); // Assuming you have a geminiRouter for handling Gemini API requests
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log('Unhandled error:', err);
-  res.status(500).json({ message: err });
-});
-
 
 const PORT = process.env.PORT || 3000; // Default to 3000 if PORT is not set
 app.listen(PORT, () => {
