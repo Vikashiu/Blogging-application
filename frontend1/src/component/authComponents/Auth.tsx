@@ -49,7 +49,7 @@ export const Auth = () => {
                 <div className="pt-7">
                     <button type="button" onClick={ async () => {
                         try {
-                            const res = await axios.post<any>(`${BACKEND_URL}api/v1/users/signup`, {
+                            const res = await axios.post<any>(`${BACKEND_URL}/api/v1/users/signup`, {
                                 name: postInputs.name,
                                 username: postInputs.username,
                                 password: postInputs.password,

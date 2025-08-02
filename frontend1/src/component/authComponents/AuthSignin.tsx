@@ -47,7 +47,7 @@ export const AuthSignin = () => {
                                 alert("Please enter both username and password");
                                 return;
                             }
-                            const res = await axios.post<SignupResponse>(`${BACKEND_URL}api/v1/users/signin`, {
+                            const res = await axios.post<SignupResponse>(`${BACKEND_URL}/api/v1/users/signin`, {
                                 username: postInputs.username,
                                 password: postInputs.password,
                             });
