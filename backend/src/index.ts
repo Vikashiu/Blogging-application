@@ -30,8 +30,8 @@ app.use('/api/v1/tags', tagRouter);
 app.use('/api/v1/gemini', giminiRouter); // Assuming you have a geminiRouter for handling Gemini API requests
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({ message: 'Something went wrong' });
+  console.log('Unhandled error:', err);
+  res.status(500).json({ message: err });
 });
 
 
