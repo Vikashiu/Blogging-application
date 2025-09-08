@@ -11,6 +11,7 @@ interface PublishPageProps {
 }
 
 const PublishPage = ({title, content,onClose, onSubmit}:PublishPageProps) => {
+  // console.log("Content in PublishPage:", content);
   const [topicInput, setTopicInput] = useState<string>('');
   const [storySubtitle, setStorySubtitle] = useState<string>('');
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);

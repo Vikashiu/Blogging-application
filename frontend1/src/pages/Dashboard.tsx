@@ -11,12 +11,13 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Dashboard() {
   const [blogs, setBlogs] = useState<Blogtype[]>([]);
   const [tags, setTags] = useState<Tagtype[]>([]);
-  const [activeTagId, setActiveTagId] = useState<string | null>(null);
+  // const [activeTagId, setActiveTagId] = useState<string | null>(null);
   const [loadingTags, setLoadingTags] = useState(true); // New loading state for tags
   const [loadingBlogs, setLoadingBlogs] = useState(true); // New loading state for blogs
 
   useEffect(() => {
     // Fetch Tags
+    // console.log(tags, loadingTags);
     setLoadingTags(true); // Set loading for tags to true
     axios
       .get<AnyActionArg>(`${BACKEND_URL}/api/v1/tags`)
@@ -43,10 +44,10 @@ export default function Dashboard() {
     }
   };
 
-  const handleTagSelect = (tagId: string | null) => {
-    setActiveTagId(tagId);
-    // fetchBlogs(tagId); // Call fetchBlogs when a tag is selected
-  };
+  // const handleTagSelect = (tagId: string | null) => {
+  //   setActiveTagId(tagId);
+  //   // fetchBlogs(tagId); // Call fetchBlogs when a tag is selected
+  // };
 
   return (
     <div>
