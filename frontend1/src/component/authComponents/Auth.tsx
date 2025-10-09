@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useState, } from "react"
 import axios from "axios"
 import type { SignupInput } from '@vikash_ay/medium-common/dist/userValidation'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const Auth = () => {
     const [postInputs, setPostInputs] = useState<SignupInput>({
         name: "",
@@ -48,7 +49,7 @@ export const Auth = () => {
                 <div className="pt-7">
                     <button type="button" onClick={ async () => {
                         try {
-                            const res = await axios.post<any>("http://localhost:3000/api/v1/users/signup", {
+                            const res = await axios.post<any>(`${BACKEND_URL}/api/v1/users/signup`, {
                                 name: postInputs.name,
                                 username: postInputs.username,
                                 password: postInputs.password,
