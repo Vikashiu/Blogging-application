@@ -18,6 +18,9 @@ model User {
   updatedAt DateTime  @updatedAt
   posts     Blog[]
   comments  Comment[]
+
+  @@index([name])
+  @@index([createdAt])
 }
 
 model Blog {
@@ -36,6 +39,14 @@ model Blog {
   author      User      @relation(fields: [authorId], references: [id])
   comments    Comment[]
   tags        Tag[]     @relation("PostTags")
+
+
+  @@index([authorId])
+  @@index([published])
+  @@index([createdAt])
+  @@index([views])
+  @@index([likes])
+  @@index([title])
 }
 
 model Tag {
@@ -43,6 +54,9 @@ model Tag {
   name      String   @unique
   createdAt DateTime @default(now())
   posts     Blog[]   @relation("PostTags")
+
+  @@index([name])
+  @@index([createdAt])
 }
 
 model Comment {
@@ -53,4 +67,8 @@ model Comment {
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   post      Blog     @relation(fields: [postId], references: [id])
+
+  @@index([authorId])
+  @@index([postId])
+  @@index([createdAt])
 }
