@@ -99,7 +99,7 @@ The application should now be running at http://localhost:5173 (Frontend) and ht
 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-Built with ❤️ by [Your Name]
+Built with ❤️ by Vikash Sinha
 
 
 ---
