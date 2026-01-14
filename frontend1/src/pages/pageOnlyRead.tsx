@@ -162,7 +162,7 @@ const ReadOnlyBlogPage: React.FC = () => {
     <div className='flex flex-col'>
       <MediumNavbar />
 
-      <div className="min-w-3xl mx-auto py-6 px-4 min-w-">
+      <div className="max-w-3xl mx-auto py-6 px-4 min-w-2xl">
         <h1 className="text-5xl font-extrabold text-gray-900 mb-4 break-words">
           {blog.title}
         </h1>

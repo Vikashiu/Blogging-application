@@ -3,11 +3,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { Signup } from './pages/SignUp';
 import { Signin } from './pages/SignIn';
-import { CreateBlog } from './pages/CreateBlog';
+import {CreateBlog}  from './pages/CreateBlog';
+import MyBlogs from './pages/MyBlogs';
 import Dashboard from './pages/Dashboard';
 import ReadOnlyBlogPage from './pages/pageOnlyRead';
 import { Navigate } from 'react-router-dom';
+import EditorComponent from './pages/EditBlog';
+import ProfilePage from './pages/ProfilePage';
+import Settings from './pages/Setting';
 // import  from 'react';
+
+// interface EditorProps {
+//   data: { blocks: any[] };
+//   onChange: (title: string, data: any) => void;
+// }
 
 function ProtectedRoute({ children }: {
   children: React.ReactNode;
@@ -34,6 +43,15 @@ function App() {
         />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/blog/:id" element={<ReadOnlyBlogPage />} />
+        <Route path="/myblog" element={<MyBlogs />}></Route>
+        <Route
+          path="/edit/:id"
+          element={
+            <EditorComponent/>
+          }
+        />
+        <Route path="/user/:id" element={<ProfilePage />} />
+        <Route path="settings" element={<Settings/>}></Route>
       </Routes>
     </Router>
   );

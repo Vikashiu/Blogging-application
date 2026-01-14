@@ -75,16 +75,134 @@ userRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const token = jsonwebtoken_1.default.sign({ userId }, process.env.JWT_PASSWORD);
     res.json({ token });
 }));
-userRouter.get('/', authMiddleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //@ts-ignore
-    const id = req.id;
-    const user = yield prismaClient.user.findFirst({
-        where: { id },
-        select: {
-            name: true,
-            email: true
+userRouter.get("/", authMiddleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // @ts-ignore
+        const id = req.id;
+        const user = yield prismaClient.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                avatar: true,
+                bio: true,
+                twitter: true,
+                linkedin: true,
+                github: true,
+                notifyEmail: true,
+                notifyPush: true,
+                createdAt: true
+            }
+        });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-    });
-    res.json({ user });
+        res.json({ user });
+    }
+    catch (err) {
+        console.log("User load error:", err);
+        res.status(500).json({ message: "Failed to load profile" });
+    }
+}));
+userRouter.patch("/me", authMiddleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // @ts-ignore
+        const userId = req.id;
+        if (!userId)
+            return res.status(401).json({ message: "Not authenticated" });
+        const { name, bio, avatar, twitter, linkedin, github, notifyEmail, notifyPush, currentPassword, newPassword, } = req.body;
+        // Build update object
+        const data = {};
+        if (typeof name === "string")
+            data.name = name;
+        if (typeof bio === "string")
+            data.bio = bio;
+        if (typeof avatar === "string")
+            data.avatar = avatar;
+        if (typeof twitter === "string")
+            data.twitter = twitter;
+        if (typeof linkedin === "string")
+            data.linkedin = linkedin;
+        if (typeof github === "string")
+            data.github = github;
+        if (typeof notifyEmail === "boolean")
+            data.notifyEmail = notifyEmail;
+        if (typeof notifyPush === "boolean")
+            data.notifyPush = notifyPush;
+        // If user wants to change password
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ message: "Current password required to change password" });
+            }
+            const user = yield prismaClient.user.findUnique({ where: { id: userId }, select: { password: true } });
+            if (!user)
+                return res.status(404).json({ message: "User not found" });
+            const valid = yield bcrypt_1.default.compare(currentPassword, user.password);
+            if (!valid)
+                return res.status(403).json({ message: "Current password incorrect" });
+            const hashed = yield bcrypt_1.default.hash(newPassword, 10);
+            data.password = hashed;
+        }
+        const updated = yield prismaClient.user.update({
+            where: { id: userId },
+            data,
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                avatar: true,
+                bio: true,
+                twitter: true,
+                linkedin: true,
+                github: true,
+                notifyEmail: true,
+                notifyPush: true
+            }
+        });
+        res.json({ user: updated });
+    }
+    catch (err) {
+        console.error("Update profile error:", err);
+        res.status(500).json({ message: "Failed to update profile" });
+    }
+}));
+// Important:
+// GET public profile by ID
+userRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const user = yield prismaClient.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                bio: true,
+                avatar: true,
+                createdAt: true,
+                updatedAt: true,
+                twitter: true,
+                github: true,
+                linkedin: true,
+            }
+        });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Fetch user's published blogs
+        const blogs = yield prismaClient.blog.findMany({
+            where: {
+                authorId: id,
+                published: true
+            },
+            orderBy: { createdAt: "desc" },
+        });
+        res.json({ user, blogs });
+    }
+    catch (err) {
+        console.log("Profile fetch error:", err);
+        res.status(500).json({ message: "Failed to load profile" });
+    }
 }));
 exports.default = userRouter;

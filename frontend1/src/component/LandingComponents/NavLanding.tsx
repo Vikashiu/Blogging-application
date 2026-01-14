@@ -5,7 +5,7 @@ export function NavLanding() {
 
   return (
     <div className="flex h-18 p-3 pl-10 pr-10 sm:pl-18 sm:pr-18 border-b justify-between items-center">
-      <div className="text-4xl font-medium font-serif pt-1">Medium</div>
+      <div className="text-4xl font-medium font-serif pt-1">Story Forge</div>
       <div className="flex gap-5 items-center">
         <div className="hidden md:flex gap-5">
           <button className="text-left">Our Story</button>

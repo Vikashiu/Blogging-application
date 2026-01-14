@@ -15,6 +15,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const morgan_1 = __importDefault(require("morgan"));
 const helmet_1 = __importDefault(require("helmet"));
 const client_1 = require("@prisma/client");
+// import aiRoutes from './routes/aiRoutes'
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const prisma = new client_1.PrismaClient();
@@ -27,6 +28,7 @@ app.use('/api/v1/comments', commentRoutes_1.default);
 app.use('/api/v1/users', userRoutes_1.default);
 app.use('/api/v1/tags', tagRoutes_1.default);
 app.use('/api/v1/gemini', giminiRoute_1.default); // Assuming you have a geminiRouter for handling Gemini API requests
+// app.use('/api/v1/ai',aiRoutes);
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ message: 'Something went wrong' });

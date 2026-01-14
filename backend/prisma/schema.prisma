@@ -12,8 +12,16 @@ model User {
   name      String
   email     String    @unique
   password  String
-  avatar    String?
-  bio       String?
+
+  avatar      String?
+  bio         String?
+  twitter     String?     // <--- add
+  linkedin    String?     // <--- add
+  github      String?     // <--- add
+
+  notifyEmail Boolean     @default(true)   // <--- add
+  notifyPush  Boolean     @default(false)  // <--- add
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   posts     Blog[]
@@ -22,6 +30,7 @@ model User {
   @@index([name])
   @@index([createdAt])
 }
+
 
 model Blog {
   id          String    @id @default(uuid())

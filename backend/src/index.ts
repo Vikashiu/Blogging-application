@@ -11,6 +11,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import { Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
+// import aiRoutes from './routes/aiRoutes'
 dotenv.config();
 
 
@@ -28,7 +29,7 @@ app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/tags', tagRouter);
 app.use('/api/v1/gemini', giminiRouter); // Assuming you have a geminiRouter for handling Gemini API requests
-
+// app.use('/api/v1/ai',aiRoutes);
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ message: 'Something went wrong' });

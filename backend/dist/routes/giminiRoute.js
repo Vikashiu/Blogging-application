@@ -48,21 +48,26 @@ const callGeminiAPI = (prompt, schema) => __awaiter(void 0, void 0, void 0, func
 //   });
 //   console.log(response.text)
 app.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { prompt, topic } = req.body;
+    const { prompt, topic, editorData } = req.body;
     if (!prompt)
         return res.status(400).json({ error: "Prompt is required" });
     try {
-        // const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-        // const result = await model.generateContent(prompt);
-        // const text = await result.response.text();
-        // res.json({ result: text });
-        // const response = await callGeminiAPI(prompt);
-        // console.log("Gemini API Response:", response);
-        // res.json( response)
+        const plainText = editorData.blocks
+            .map((block) => {
+            if (block.type === "paragraph")
+                return block.data.text;
+            if (block.type === "header")
+                return `${"#".repeat(block.data.level)} ${block.data.text}`;
+            if (block.type === "list")
+                return block.data.items.join("\n");
+            return "";
+        })
+            .join("\n\n");
         const response = yield ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: ["you are a professional blog writter, use good word and make your response to the point",
-                "your response should contain alphabet, don't add unnecessory symbol, basically it should look like that a human has written it",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                plainText,
                 prompt,
             ]
         });
@@ -93,19 +98,13 @@ app.post('/summarize', (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
         })
             .join('\n\n');
-        console.log('Plain Text:', plainText);
-        // const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-        // const result = await model.generateContent(
-        //   `Summarize the following blog post:\n\n${plainText}`
-        // );
-        // const response = await result.response;
-        // const text = response.text();
-        // return res.json({ summary: text });
+        // console.log('Plain Text:', plainText);
         const response = yield ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: ["you are a professional blog writter, use good word and make your response to the point",
                 "your response should contain alphabet, don't add unnecessory symbol, basically it should look like that a human has written it",
-                plainText,
+                `you need to summarize what is written in plaintext`,
+                `plainText is : ${plainText}`,
             ]
         });
         //   console.log(response.text);
@@ -114,6 +113,151 @@ app.post('/summarize', (req, res) => __awaiter(void 0, void 0, void 0, function*
     catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to generate summary' });
+    }
+}));
+app.post('/continue', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, prompt, editorData } = req.body;
+    if (!prompt)
+        return res.status(400).json({ error: "Prompt is required" });
+    try {
+        const plainText = editorData.blocks
+            .map((block) => {
+            if (block.type === "paragraph")
+                return block.data.text;
+            if (block.type === "header")
+                return `${"#".repeat(block.data.level)} ${block.data.text}`;
+            if (block.type === "list")
+                return block.data.items.join("\n");
+            return "";
+        })
+            .join("\n\n");
+        const response = yield ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: ["you are a professional blog writter, use good word and make your response to the point",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                plainText,
+                prompt,
+            ]
+        });
+        //   console.log(response.text);
+        res.json({ result: response.text });
+    }
+    catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to coninute" });
+    }
+}));
+app.post('/rewrite', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { text, action } = req.body;
+    // if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+    try {
+        const response = yield ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: ["you are a professional blog writter, use good word and make your response to the point",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                `so the text is : ${text}`,
+                `you need to perform ${action} on the text to modify, check good flow and grammer check, improve the text`,
+            ]
+        });
+        //   console.log(response.text);
+        res.json({ result: response.text });
+    }
+    catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to coninute" });
+    }
+}));
+app.post('/improve', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { editorData } = req.body;
+    // if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+    try {
+        const plainText = editorData.blocks
+            .map((block) => {
+            if (block.type === "paragraph")
+                return block.data.text;
+            if (block.type === "header")
+                return `${"#".repeat(block.data.level)} ${block.data.text}`;
+            if (block.type === "list")
+                return block.data.items.join("\n");
+            return "";
+        })
+            .join("\n\n");
+        const response = yield ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: ["you are a professional blog writter, use good word and make your response to the point",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                `editor data is : ${plainText}`,
+                `improve the writing style of editordata`,
+            ]
+        });
+        //   console.log(response.text);
+        res.json({ result: response.text });
+    }
+    catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to coninute" });
+    }
+}));
+app.post('/title', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { editorData } = req.body;
+    // if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+    try {
+        const plainText = editorData.blocks
+            .map((block) => {
+            if (block.type === "paragraph")
+                return block.data.text;
+            if (block.type === "header")
+                return `${"#".repeat(block.data.level)} ${block.data.text}`;
+            if (block.type === "list")
+                return block.data.items.join("\n");
+            return "";
+        })
+            .join("\n\n");
+        const response = yield ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: ["you are a professional blog writter, use good word and make your response to the point",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                `plainText is : ${plainText}`,
+                `based on the plaintext can you generate the best title for it`,
+            ]
+        });
+        //   console.log(response.text);
+        res.json({ result: response.text });
+    }
+    catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to coninute" });
+    }
+}));
+app.post('/tags', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { editorData } = req.body;
+    // if (!prompt) return res.status(400).json({ error: "Prompt is required" });
+    try {
+        const plainText = editorData.blocks
+            .map((block) => {
+            if (block.type === "paragraph")
+                return block.data.text;
+            if (block.type === "header")
+                return `${"#".repeat(block.data.level)} ${block.data.text}`;
+            if (block.type === "list")
+                return block.data.items.join("\n");
+            return "";
+        })
+            .join("\n\n");
+        const response = yield ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: ["you are a professional blog writter, use good word and make your response to the point",
+                "your response should contain alphabet,don't add unnecessory symbol, basically it should look like that a human has written it",
+                `plainText is : ${plainText}`,
+                `your job is to extract meaningfull tags from the blog or plaintext`,
+            ]
+        });
+        //   console.log(response.text);
+        res.json({ result: response.text });
+    }
+    catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "Failed to coninute" });
     }
 }));
 exports.default = app;
