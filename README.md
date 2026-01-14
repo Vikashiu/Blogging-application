@@ -104,15 +104,3 @@ Built with ❤️ by [Your Name]
 
 ---
 
-### **Detailed Explanation of What I Added:**
-
-1.  **The Badges (Top Section):**
-    * I added the "Deploy with Vercel" and "License" badges. These make the repo look official and maintained.
-2.  **Live Demo Link:**
-    * I placed your link (`https://blogging-application-rho.vercel.app`) right at the top. Recruiters often want to click the link *before* reading the code.
-3.  **The Table for Tech Stack:**
-    * Instead of a simple list, I used a **Table**. This is much easier to read and looks very professional. It clearly separates what the specific tool (like Prisma) is actually *doing* (Database management).
-4.  **Future Improvements:**
-    * This is a "secret weapon" for junior developers. It shows you aren't just done; you are thinking about **product roadmaps** and scalability. It shows ambition.
-5.  **Detailed Setup Instructions:**
-    * I separated the `client` and `server` instructions. Since you have a monorepo structure (likely folder `client/` and `server/`), this prevents users from getting errors by trying to run backend commands in the frontend folder.
