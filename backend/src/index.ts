@@ -19,7 +19,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 app.use(helmet()); // Security headers
 app.use(morgan('dev')); // Logging
